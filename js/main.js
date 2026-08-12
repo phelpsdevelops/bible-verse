@@ -1,6 +1,6 @@
 const VERSE_STORAGE_KEY = "verseOfTheDay"
 
-getVerseOfTheDay()
+document.querySelector('#verse-btn').addEventListener('click', getVerseOfTheDay)
 
 function getVerseOfTheDay(){
 
@@ -19,7 +19,11 @@ function getVerseOfTheDay(){
         .then(res => res.json())
         .then(data=>{
             console.log(data)
-            localStorage.setItem(VERSE_STORAGE_KEY, JSON.stringify({ date: today, data }))
+
+            if(data && data.contents && data.contents.verse){
+                localStorage.setItem(VERSE_STORAGE_KEY, JSON.stringify({ date: today, data }))
+            }
+
             renderVerse(data)
 
         })
@@ -30,6 +34,14 @@ function getVerseOfTheDay(){
 }
 
 function renderVerse(data){
-    document.querySelector('h1').innerText+=" "+
-    document.querySelector('h2').innerText
+    const verse = data && data.contents && data.contents.verse
+
+    if(!verse){
+        document.querySelector('#verse-text').textContent = "Sorry, today's verse couldn't be loaded."
+        return
+    }
+
+    document.querySelector('#verse-text').textContent = verse.text
+    document.querySelector('#verse-reference').textContent =
+        [verse.book, verse.chapter, verse.verse].filter(Boolean).join(' ')
 }

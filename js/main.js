@@ -34,14 +34,14 @@ function getVerseOfTheDay(){
 }
 
 function renderVerse(data){
-    const verse = data && data.contents && data.contents.verse
+    const contents = data && data.contents
 
-    if(!verse){
+    if(!contents || !contents.verse){
         document.querySelector('#verse-text').textContent = "Sorry, today's verse couldn't be loaded."
         return
     }
 
-    document.querySelector('#verse-text').textContent = verse.text
+    document.querySelector('#verse-text').textContent = contents.verse
     document.querySelector('#verse-reference').textContent =
-        [verse.book, verse.chapter, verse.verse].filter(Boolean).join(' ')
+        [contents.book, contents.chapter].filter(Boolean).join(' ')
 }
